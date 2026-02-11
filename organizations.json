@@ -1,0 +1,26 @@
+[
+   {
+      "OrganizationName":"IFS",
+      "Teams":[
+         "IFS UK",
+         "IFS Sydney",
+         "IFS Luxembourg"
+      ]
+   },
+   {
+      "OrganizationName":"IFS UK",
+      "Teams":[
+         "HHD",
+         "SAS",
+         "MOS",
+         "SDM"
+      ]
+   },
+   {
+      "OrganizationName":"IFS Sydney",
+      "Teams":[
+         "XYZ",
+         "ABC"
+      ]
+   }
+]

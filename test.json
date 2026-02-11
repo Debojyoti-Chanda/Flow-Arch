@@ -1,0 +1,66 @@
+{
+    "HHD": [
+        {
+            "name": "Flow 1",
+            "type": "flow",
+            "children": [
+                {
+                    "name": "Hiport",
+                    "type": "application",
+                    "children": [
+                        {
+                            "name": "IHub",
+                            "type": "application",
+                            "children": [
+                                {
+                                    "name": "JHI",
+                                    "type": "application"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Flow 2",
+            "type": "flow",
+            "children": [
+                {
+                    "name": "Hiport",
+                    "type": "application",
+                    "children": [
+                        {
+                            "name": "IHub",
+                            "type": "application",
+                            "children": [
+                                {
+                                    "name": "LD",
+                                    "type": "application"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+{('HHD',
+    1): [
+        {'Team': 'HHD', 'FlowId': 1, 'Application': 'Hiport', 'SequenceNo': 1
+        },
+        {'Team': 'HHD', 'FlowId': 1, 'Application': 'IHub', 'SequenceNo': 2
+        },
+        {'Team': 'HHD', 'FlowId': 1, 'Application': 'JHI', 'SequenceNo': 3
+        }
+    ], ('HHD',
+    2): [
+        {'Team': 'HHD', 'FlowId': 2, 'Application': 'Hiport', 'SequenceNo': 1
+        },
+        {'Team': 'HHD', 'FlowId': 2, 'Application': 'IHub', 'SequenceNo': 2
+        },
+        {'Team': 'HHD', 'FlowId': 2, 'Application': 'LD', 'SequenceNo': 3
+        }
+    ]
+}

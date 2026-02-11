@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>IFS Flow Mind Map</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Architecture Flow Explorer</h1>
+    </header>
+    <!-- Sidebar for search and info panel -->
+    <div id="sidebar">
+        <button id="sidebar-toggle">⬅️</button>
+
+        <div class="sidebar-content">
+            <h2>IFS Explorer</h2>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search app & press Enter...">
+            </div>
+
+            <div id="info-panel">
+                <div class="info-header">
+                    <h3>Node Details</h3>
+                    <span id="match-count" class="match-badge"></span>
+                </div>
+                <div id="info-content">
+                    <p class="placeholder">Click a node to see the flow sequence.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Main container for the mind map -->
+    <div id="mindmap-container">
+        <svg id="mindmap"></svg>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>
