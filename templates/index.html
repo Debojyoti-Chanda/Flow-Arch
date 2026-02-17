@@ -19,6 +19,19 @@
             <h2>IFS Explorer</h2>
             <div class="search-container">
                 <input type="text" id="search-input" placeholder="Search app & press Enter...">
+                <div class="filter-group" style="margin: 15px;">
+                    <label for="org-filter">Organization</label>
+                    <select id="org-filter" class="filter-select">
+                        <option value="all">All Organizations</option>
+                    </select>
+                </div>
+
+                <div class="filter-group" style="margin: 15px;">
+                    <label for="team-filter">Team</label>
+                    <select id="team-filter" class="filter-select">
+                        <option value="all">All Teams</option>
+                    </select>
+                </div>
             </div>
 
             <div id="info-panel">

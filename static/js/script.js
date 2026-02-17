@@ -15,10 +15,26 @@ tree = d3.tree().nodeSize([200, 160]);
 // Load data and render the tree
 d3.json("/api/data").then(data => {
     root = d3.hierarchy(data);
+
+    // Populate Dropdowns
+    const orgs = new Set();
+    const teams = new Set();
+    
+    root.descendants().forEach(d => {
+        if (d.data.type === 'org') orgs.add(d.data.name);
+        if (d.data.type === 'team') teams.add(d.data.name);
+    });
+
+    const orgSelect = document.getElementById('org-filter');
+    orgs.forEach(org => orgSelect.add(new Option(org, org)));
+
+    const teamSelect = document.getElementById('team-filter');
+    teams.forEach(team => teamSelect.add(new Option(team, team)));
+
     root.x0 = 0; root.y0 = 0;
     // Collapse all nodes initially
     if (root.children) root.children.forEach(collapseAll);
-    
+
     update(root);
     resetView();
 });
@@ -41,36 +57,103 @@ function expandNode(d) {
 }
 
 // Search on Enter - Recursive Expansion Logic
-document.getElementById('search-input').addEventListener('keydown', function(e) {
+// document.getElementById('search-input').addEventListener('keydown', function (e) {
+//     if (e.key === 'Enter') {
+//         const term = this.value.toLowerCase().trim();
+//         const countBadge = document.getElementById('match-count');
+
+//         // Reset highlights and badge
+//         g.selectAll(".node").classed("highlight", false);
+//         countBadge.innerText = "";
+//         countBadge.style.display = "none";
+
+//         if (!term) return;
+
+//         let matches = [];
+
+//         // 1. Recursive Deep Search (checks hidden _children)
+//         function searchAll(d) {
+//             if (d.data.name.toLowerCase().includes(term)) {
+//                 matches.push(d);
+//             }
+//             const children = d.children || d._children;
+//             if (children) children.forEach(searchAll);
+//         }
+//         searchAll(root);
+
+//         // 2. Update the Sidebar Match Count
+//         if (matches.length > 0) {
+//             countBadge.innerText = `${matches.length} found`;
+//             countBadge.style.display = "inline-block";
+
+//             // 3. Expand the path to every match
+//             matches.forEach(d => {
+//                 let curr = d;
+//                 while (curr.parent) {
+//                     if (curr.parent._children) {
+//                         curr.parent.children = curr.parent._children;
+//                         curr.parent._children = null;
+//                     }
+//                     curr = curr.parent;
+//                 }
+//             });
+
+//             // 4. Redraw tree and focus
+//             update(root);
+
+//             setTimeout(() => {
+//                 g.selectAll(".node").classed("highlight", d =>
+//                     d.data.name.toLowerCase().includes(term)
+//                 );
+//                 // Center on the first result
+//                 centerOnNode(matches[0]);
+//             }, 500);
+
+//         } else {
+//             countBadge.innerText = "0 found";
+//             countBadge.style.display = "inline-block";
+//             alert("No matches found.");
+//         }
+//     }
+// });
+
+document.getElementById('search-input').addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
         const term = this.value.toLowerCase().trim();
+        const selectedOrg = document.getElementById('org-filter').value;
+        const selectedTeam = document.getElementById('team-filter').value;
         const countBadge = document.getElementById('match-count');
-        
-        // Reset highlights and badge
-        g.selectAll(".node").classed("highlight", false);
-        countBadge.innerText = "";
-        countBadge.style.display = "none";
 
-        if (!term) return;
+        g.selectAll(".node").classed("highlight", false);
+        if (!term && selectedOrg === 'all' && selectedTeam === 'all') return;
 
         let matches = [];
 
-        // 1. Recursive Deep Search (checks hidden _children)
         function searchAll(d) {
-            if (d.data.name.toLowerCase().includes(term)) {
+            let isMatch = true;
+            const nameMatch = d.data.name.toLowerCase().includes(term);
+            
+            // Check Org/Team Hierarchy
+            if (selectedOrg !== 'all' || selectedTeam !== 'all') {
+                let pathNames = d.ancestors().map(a => a.data.name);
+                if (selectedOrg !== 'all' && !pathNames.includes(selectedOrg)) isMatch = false;
+                if (selectedTeam !== 'all' && !pathNames.includes(selectedTeam)) isMatch = false;
+            }
+
+            if (nameMatch && isMatch) {
                 matches.push(d);
             }
+            
             const children = d.children || d._children;
             if (children) children.forEach(searchAll);
         }
+
         searchAll(root);
 
-        // 2. Update the Sidebar Match Count
         if (matches.length > 0) {
             countBadge.innerText = `${matches.length} found`;
             countBadge.style.display = "inline-block";
 
-            // 3. Expand the path to every match
             matches.forEach(d => {
                 let curr = d;
                 while (curr.parent) {
@@ -82,21 +165,14 @@ document.getElementById('search-input').addEventListener('keydown', function(e) 
                 }
             });
 
-            // 4. Redraw tree and focus
-            update(root); 
-            
+            update(root);
             setTimeout(() => {
-                g.selectAll(".node").classed("highlight", d => 
-                    d.data.name.toLowerCase().includes(term)
-                );
-                // Center on the first result
+                g.selectAll(".node").classed("highlight", d => matches.includes(d));
                 centerOnNode(matches[0]);
             }, 500);
-
         } else {
             countBadge.innerText = "0 found";
             countBadge.style.display = "inline-block";
-            alert("No matches found.");
         }
     }
 });
@@ -135,8 +211,8 @@ function update(source) {
         .attr("transform", d => `translate(${source.x0},${source.y0})`)
         .on('click', (event, d) => {
             // FIX: This must be inside the update loop to have access to 'd'
-            showDetails(d); 
-            
+            showDetails(d);
+
             if (d.children) { d._children = d.children; d.children = null; }
             else { expandNode(d); }
             update(d);
@@ -154,7 +230,7 @@ function update(source) {
 
     const link = g.selectAll('path.link').data(links, d => d.id);
     const linkEnter = link.enter().insert('path', "g").attr("class", "link")
-        .attr('d', d => { const o = {x: source.x0, y: source.y0}; return diagonal(o, o); });
+        .attr('d', d => { const o = { x: source.x0, y: source.y0 }; return diagonal(o, o); });
 
     linkEnter.merge(link).transition().duration(500).attr('d', d => diagonal(d, d.parent));
     link.exit().transition().duration(500).attr('d', d => diagonal(source, source)).remove();
@@ -175,7 +251,7 @@ function showDetails(d) {
     if (d.data.type === 'application' && d.data.sequence) {
         html += `<div class="sequence-box">
                     <strong>End-to-End Flow (ID: ${d.data.flowId}):</strong>`;
-        
+
         html += d.data.sequence.map((name, idx) => `
             <div class="flow-step ${name === d.data.name ? 'highlight-step' : ''}">
                 <span class="step-num">${idx + 1}</span> ${name}
