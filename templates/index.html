@@ -12,38 +12,53 @@
         <h1>Architecture Flow Explorer</h1>
     </header>
     <!-- Sidebar for search and info panel -->
-    <div id="sidebar">
-        <button id="sidebar-toggle">⬅️</button>
+    <div id="sidebar" >
+        <!-- <button id="sidebar-toggle" aria-label="Toggle Sidebar">⬅️</button> -->
 
         <div class="sidebar-content">
-            <h2>IFS Explorer</h2>
-            <div class="search-container">
-                <input type="text" id="search-input" placeholder="Search app & press Enter...">
-                <div class="filter-group" style="margin: 15px;">
+            <!-- <div class="explorer-header">
+                <h2>IFS Explorer</h2>
+                <p class="subtitle">Architecture Flow Navigation</p>
+            </div> -->
+
+            <div class="search-section">
+                <div class="input-group">
+                    <label for="search-input">Search Application</label>
+                    <div class="search-wrapper">
+                        <input type="text" id="search-input" placeholder="Type name & press Enter...">
+                        <span class="search-icon">🔍</span>
+                    </div>
+                </div>
+
+                <div class="filter-group">
                     <label for="org-filter">Organization</label>
                     <select id="org-filter" class="filter-select">
                         <option value="all">All Organizations</option>
                     </select>
                 </div>
 
-                <div class="filter-group" style="margin: 15px;">
+                <div class="filter-group">
                     <label for="team-filter">Team</label>
                     <select id="team-filter" class="filter-select">
                         <option value="all">All Teams</option>
                     </select>
+                </div>
+
+                <div class="search-footer">
+                    <span id="match-count" class="match-badge"></span>
                 </div>
             </div>
 
             <div id="info-panel">
                 <div class="info-header">
                     <h3>Node Details</h3>
-                    <span id="match-count" class="match-badge"></span>
                 </div>
                 <div id="info-content">
-                    <p class="placeholder">Click a node to see the flow sequence.</p>
+                    <p class="placeholder">Click a node to explore the specific data flow sequence.</p>
                 </div>
             </div>
         </div>
+
     </div>
     <!-- Main container for the mind map -->
     <div id="mindmap-container">

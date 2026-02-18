@@ -1,66 +1,129 @@
 {
-    "HHD": [
+  "children": [
+    {
+      "children": [
         {
-            "name": "Flow 1",
-            "type": "flow",
-            "children": [
+            {
+              "children": [
                 {
-                    "name": "Hiport",
-                    "type": "application",
-                    "children": [
-                        {
-                            "name": "IHub",
-                            "type": "application",
-                            "children": [
-                                {
-                                    "name": "JHI",
-                                    "type": "application"
-                                }
-                            ]
-                        }
-                    ]
+                  "children": [
+                    {
+                      "flowId": 2,
+                      "name": "LD",
+                      "sequence": [
+                        "Hiport",
+                        "IHub",
+                        "LD"
+                      ],
+                      "type": "application"
+                    }
+                  ],
+                  "flowId": 2,
+                  "name": "IHub",
+                  "sequence": [
+                    "Hiport",
+                    "IHub",
+                    "LD"
+                  ],
+                  "type": "application"
+                },
+                {
+                  "children": [
+                    {
+                      "flowId": 1,
+                      "name": "JHI",
+                      "sequence": [
+                        "Hiport",
+                        "PrismMQ",
+                        "JHI"
+                      ],
+                      "type": "application"
+                    }
+                  ],
+                  "flowId": 1,
+                  "name": "PrismMQ",
+                  "sequence": [[
+                    "Hiport",
+                    "PrismMQ",
+                    "JHI"
+                  ],[
+                "Hiport",
+                "PrismMQ",
+                "JHI"
+              ]
+                ],
+                  "type": "application"
                 }
-            ]
+
+              ],
+              "flowId": [1, 2],
+              "name": "Hiport",
+              "sequence": [
+                "Hiport",
+                "IHub",
+                "LD"
+              ],
+              "type": "application"
+            },
+            {
+              "children": [
+                {
+                  "flowId": 3,
+                  "name": "Hiport",
+                  "sequence": [
+                    "RR",
+                    "Hiport"
+                  ],
+                  "type": "application"
+                }
+              ],
+              "flowId": 3,
+              "name": "RR",
+              "sequence": [
+                "RR",
+                "Hiport"
+              ],
+              "type": "application"
+            }
+          ],
+          "name": "HHD",
+          "type": "team"
         },
         {
-            "name": "Flow 2",
-            "type": "flow",
-            "children": [
-                {
-                    "name": "Hiport",
-                    "type": "application",
-                    "children": [
-                        {
-                            "name": "IHub",
-                            "type": "application",
-                            "children": [
-                                {
-                                    "name": "LD",
-                                    "type": "application"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
+          "name": "SAS",
+          "type": "sub-org"
+        },
+        {
+          "name": "MOS",
+          "type": "sub-org"
+        },
+        {
+          "name": "SDM",
+          "type": "sub-org"
         }
-    ]
-}
-{('HHD',
-    1): [
-        {'Team': 'HHD', 'FlowId': 1, 'Application': 'Hiport', 'SequenceNo': 1
+      ],
+      "name": "IFS UK",
+      "type": "org"
+    },
+    {
+      "children": [
+        {
+          "name": "XYZ",
+          "type": "sub-org"
         },
-        {'Team': 'HHD', 'FlowId': 1, 'Application': 'IHub', 'SequenceNo': 2
-        },
-        {'Team': 'HHD', 'FlowId': 1, 'Application': 'JHI', 'SequenceNo': 3
+        {
+          "name": "ABC",
+          "type": "sub-org"
         }
-    ], ('HHD',
-    2): [
-        {'Team': 'HHD', 'FlowId': 2, 'Application': 'Hiport', 'SequenceNo': 1
-        },
-        {'Team': 'HHD', 'FlowId': 2, 'Application': 'IHub', 'SequenceNo': 2
-        },
-        {'Team': 'HHD', 'FlowId': 2, 'Application': 'LD', 'SequenceNo': 3
-        }
-    ]
+      ],
+      "name": "IFS Sydney",
+      "type": "org"
+    },
+    {
+      "name": "IFS Luxembourg",
+      "type": "sub-org"
+    }
+  ],
+  "name": "IFS",
+  "type": "org"
 }

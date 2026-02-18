@@ -1,203 +1,217 @@
 :root {
     --primary: #2563eb;
-    --highlight: #ef4444;
-    --bg: #ffffff;
+    --highlight: #ffeb3b;
+    --bg: #c4ddf9;
+    --border: #e2e8f0;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
 }
 
-body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background: var(--bg);
-    overflow: hidden;
+body { 
+    margin: 0; 
+    font-family: 'Inter', sans-serif; 
+    background: var(--bg); 
+    overflow: hidden; 
 }
 
+/* Header - Lower z-index than sidebar */
 header {
-    position: fixed;
-    background: var(--primary);
+    position: fixed; 
+    top: 0;
+    left: 0;
+    background: var(--primary); 
     color: white;
-    padding: 20px 40px;
-    text-align: center;
-    width: 100%;
+    padding: 15px 40px; 
+    text-align: center; 
+    width: 100%; 
     z-index: 1000;
+    box-sizing: border-box;
 }
 
-/* Sidebar Movement */
+/* Sidebar - High z-index to stay on top */
 #sidebar {
     position: fixed;
     left: 0;
     top: 0;
-    width: 300px;
+    width: 320px;
     height: 100vh;
-    transition: transform 0.3s ease-in-out;
-    z-index: 2000;
     background: white;
-    border-right: 1px solid #ddd;
+    z-index: 3000;
+    /* Smooth movement */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border-right: 1px solid #e2e8f0;
+    box-shadow: 2px 0 15px rgba(0,0,0,0.05);
+    /* Ensure it starts expanded */
+    transform: translateX(0); 
 }
 
+/* 2. The Collapse Rule - must be exactly this name */
 #sidebar.collapsed {
-    transform: translateX(-300px);
-    /* Moves it off-screen */
+    transform: translateX(-320px) !important;
 }
 
+/* 3. The Button - ensure it's pinned to the sidebar's right edge */
 #sidebar-toggle {
     position: absolute;
-    right: -40px;
-    top: 20px;
-    width: 40px;
-    height: 40px;
-    background: rgb(151, 132, 132);
+    left: 100%; 
+    top: 80px; 
+    width: 42px;
+    height: 42px;
+    background: white;
     border: 1px solid #e2e8f0;
     border-left: none;
     cursor: pointer;
     border-radius: 0 8px 8px 0;
-    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3001;
+    box-shadow: 4px 0 8px rgba(0,0,0,0.1);
 }
 
-.sidebar-content {
-    padding: 25px;
+#sidebar-toggle:hover {
+    background: #f1f5f9;
+    color: var(--primary);
 }
 
-.search-container label {
+/* Content Area */
+.sidebar-content { 
+    padding: 85px 20px 20px 20px; /* Space at top for header height */
+    height: 100%;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.explorer-header {
+    margin-bottom: 25px;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 10px;
+}
+
+.explorer-header h2 {
+    margin: 0;
+    color: var(--text-main);
+    font-size: 1.4rem;
+}
+
+.subtitle {
     font-size: 12px;
-    font-weight: 700;
-    color: #64748b;
-    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 4px 0 0 0;
 }
+
+/* Search & Filters */
+.search-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.input-group label, .filter-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.search-wrapper { position: relative; }
 
 #search-input {
-    width: 90%;
-    padding: 12px;
-    margin-top: 8px;
-    border: 2px solid #e2e8f0;
+    width: 100%;
+    padding: 12px 35px 12px 12px;
+    border: 1.5px solid var(--border);
     border-radius: 8px;
-    outline: none;
-    transition: border-color 0.2s;
-}
-
-#search-input:focus {
-    border-color: var(--primary);
-}
-
-.help-text {
-    font-size: 11px;
-    color: #94a3b8;
-    margin-top: 5px;
-}
-
-#info-panel {
-    margin-top: 40px;
-    border-top: 1px solid #f1f5f9;
-    padding-top: 20px;
-}
-
-/* D3 Styles */
-.node circle {
-    stroke: var(--primary);
-    stroke-width: 2px;
-    fill: #fff;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.node text {
-    font-size: 12px;
-    font-weight: 500;
-    pointer-events: none;
-}
-
-.link {
-    fill: none;
-    stroke: #cbd5e0;
-    stroke-width: 1.5px;
-}
-
-
-.node.highlight text {
-    fill: #991b1b;
-    font-weight: 900;
     font-size: 14px;
+    box-sizing: border-box;
 }
 
-.flow-step {
-    padding: 10px;
-    background: #eff6ff;
-    border-left: 4px solid var(--primary);
-    margin: 8px 0;
-    border-radius: 0 4px 4px 0;
-    font-size: 13px;
-}
-
-.node.highlight circle {
-    fill: #ffeb3b !important;
-    /* Vivid Yellow */
-    stroke: #f57f17 !important;
-    stroke-width: 4px !important;
-    r: 14px !important;
-}
-
-.node.highlight text {
-    fill: #e65100;
-    font-weight: 800;
-    font-size: 15px;
-}
-
-
-
-/* Details Styling */
-.flow-step {
-    display: flex;
-    align-items: center;
-    background: #f0f7ff;
-    margin: 8px 0;
-    padding: 10px;
-    border-radius: 6px;
-    font-size: 14px;
-    border-left: 4px solid #2563eb;
-}
-
-.step-num {
-    background: #2563eb;
-    color: white;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 11px;
-    margin-right: 10px;
-}
-
-.info-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.match-badge {
-    background: #eef2ff;
-    color: #2563eb;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 700;
-    border: 1px solid #dbeafe;
-    display: none; /* Hidden by default */
+.search-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.5;
 }
 
 .filter-select {
     width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #cbd5e0;
-    border-radius: 6px;
-    background: white;
+    padding: 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: #f8fafc;
     font-size: 13px;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 14px;
 }
 
-.filter-group label {
-    font-size: 11px;
+/* D3 Mindmap Nodes */
+#mindmap-container {
+    width: 100vw;
+    height: 100vh;
+}
+
+.node circle { stroke-width: 2px; cursor: pointer; transition: 0.3s; }
+.node-org circle { stroke: #1e293b; fill: #1e293b; }
+.node-team circle { stroke: #2563eb; fill: #2563eb; }
+.node-application circle { stroke: #2563eb; fill: #ffffff; }
+
+.node.highlight circle {
+    fill: var(--highlight) !important;
+    stroke: #f57f17 !important;
+    stroke-width: 4px;
+    r: 16;
+}
+
+.link { fill: none; stroke: #a7a8aa; stroke-width: 4px; }
+
+/* Detail Boxes */
+.sequence-box {
+    margin-top: 15px; 
+    border: 1px solid var(--border);
+    padding: 12px; 
+    border-radius: 8px; 
+    background: #fff;
+}
+
+.flow-step {
+    display: flex; 
+    align-items: center; 
+    padding: 8px;
+    font-size: 13px; 
+    border-left: 3px solid var(--border);
+    margin-bottom: 4px;
+}
+
+.highlight-step { 
+    background: #eff6ff; 
+    border-left-color: var(--primary); 
+    font-weight: bold; 
+}
+
+.step-num {
+    background: var(--text-muted); 
+    color: white; 
+    width: 20px; height: 20px;
+    border-radius: 50%; 
+    display: flex; justify-content: center; align-items: center;
+    font-size: 10px; 
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.highlight-step .step-num { background: var(--primary); }
+
+.match-badge {
+    background: #eef2ff;
+    color: var(--primary);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
     font-weight: bold;
-    color: #475569;
 }
