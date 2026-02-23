@@ -59,6 +59,28 @@ document.getElementById('search-input').addEventListener('keydown', function (e)
         g.selectAll(".node").classed("highlight", false);
         if (!term && selectedOrg === 'all' && selectedTeam === 'all') return;
 
+        // Helper: Collapse all nodes in the tree
+        function collapseAllDeep(d) {
+            if (d.children) {
+                d.children.forEach(collapseAllDeep);
+                d._children = d.children;
+                d.children = null;
+            } else if (d._children) {
+                d._children.forEach(collapseAllDeep);
+            }
+        }
+
+        // Helper: Expand ancestors of a node
+        function expandAncestors(d) {
+            if (d.parent) {
+                expandNode(d.parent);
+                expandAncestors(d.parent);
+            }
+        }
+
+        // Collapse everything before searching
+        collapseAllDeep(root);
+
         let matches = [];
         function searchAll(d) {
             let isMatch = true;
@@ -80,12 +102,9 @@ document.getElementById('search-input').addEventListener('keydown', function (e)
         if (matches.length > 0) {
             countBadge.innerText = `${matches.length} found`;
             countBadge.style.display = "inline-block";
+            // Expand only the ancestors of matching nodes
             matches.forEach(d => {
-                let curr = d;
-                while (curr.parent) {
-                    expandNode(curr.parent);
-                    curr = curr.parent;
-                }
+                expandAncestors(d);
             });
             update(root);
             setTimeout(() => {
