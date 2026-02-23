@@ -1,87 +1,47 @@
 [
-   {
-      "Team":"HHD",
-      "FlowId":1,
-      "Application":"Hiport",
-      "SequenceNo":1
-   },
-   {
-      "Team":"HHD",
-      "FlowId":1,
-      "Application":"PrismMQ",
-      "SequenceNo":2
-   },
-   {
-      "Team":"HHD",
-      "FlowId":1,
-      "Application":"JHI",
-      "SequenceNo":3
-   },
-   {
-      "Team":"HHD",
-      "FlowId":2,
-      "Application":"Hiport",
-      "SequenceNo":1
-   },
-   {
-      "Team":"HHD",
-      "FlowId":2,
-      "Application":"IHub",
-      "SequenceNo":2
-   },
-   {
-      "Team":"HHD",
-      "FlowId":2,
-      "Application":"LD",
-      "SequenceNo":3
-   },
-   {
-      "Team":"HHD",
-      "FlowId":3,
-      "Application":"RR",
-      "SequenceNo":1
-   },
-   {
-      "Team":"HHD",
-      "FlowId":3,
-      "Application":"Hiport",
-      "SequenceNo":2
-   },
-   {
-      "Team":"SAS",
-      "FlowId":4,
-      "Application":"AppA",
-      "SequenceNo":1
-   },
-   {
-      "Team":"SAS",
-      "FlowId":4,
-      "Application":"AppB",
-      "SequenceNo":2
-   },
-   {
-      "Team":"SAS",
-      "FlowId":4,
-      "Application":"AppC",
-      "SequenceNo":3
-   },
-   {
-      "Team":"SAS",
-      "FlowId":5,
-      "Application":"AppX",
-      "SequenceNo":1
-   },
-   {
-      "Team":"SAS",
-      "FlowId":5,
-      "Application":"AppB",
-      "SequenceNo":2
-   },
-   {
-      "Team":"SAS",
-      "FlowId":5,
-      "Application":"AppZ",
-      "SequenceNo":3
-   }
-
+  {"Team": "HHD", "FlowId": 1, "Application": "App1", "SequenceNo": 1},
+  {"Team": "HHD", "FlowId": 1, "Application": "App2", "SequenceNo": 2},
+  {"Team": "HHD", "FlowId": 1, "Application": "App3", "SequenceNo": 3},
+  {"Team": "HHD", "FlowId": 2, "Application": "App4", "SequenceNo": 1},
+  {"Team": "HHD", "FlowId": 2, "Application": "App5", "SequenceNo": 2},
+  {"Team": "HHD", "FlowId": 3, "Application": "AppShared", "SequenceNo": 1},
+  {"Team": "HHD", "FlowId": 3, "Application": "App2", "SequenceNo": 2},
+  {"Team": "HHD", "FlowId": 4, "Application": "AppDuplicate", "SequenceNo": 1},
+  {"Team": "HHD", "FlowId": 4, "Application": "AppDuplicate", "SequenceNo": 1},
+  {"Team": "SAS", "FlowId": 1, "Application": "AppA", "SequenceNo": 1},
+  {"Team": "SAS", "FlowId": 1, "Application": "AppB", "SequenceNo": 2},
+  {"Team": "SAS", "FlowId": 2, "Application": "AppC", "SequenceNo": 1},
+  {"Team": "SAS", "FlowId": 2, "Application": "AppD", "SequenceNo": 2},
+  {"Team": "SAS", "FlowId": 3, "Application": "AppShared", "SequenceNo": 2},
+  {"Team": "SAS", "FlowId": 3, "Application": "AppX", "SequenceNo": 3},
+  {"Team": "SAS", "FlowId":5, "Application":"AppA", "SequenceNo":1},
+  {"Team": "SAS", "FlowId":5, "Application":"AppShared", "SequenceNo":2},
+  {"Team": "SAS", "FlowId":5, "Application":"AppDuplicate", "SequenceNo":3},
+  {"Team": "SAS", "FlowId": 3, "Application": "AppA", "SequenceNo": 1},
+  {"Team": "SAS", "FlowId": 4, "Application": "AppDuplicate", "SequenceNo": 2},
+  {"Team": "SAS", "FlowId": 4, "Application": "AppDuplicate", "SequenceNo": 2},
+  {"Team": "MOS", "FlowId": 1, "Application": "MOSApp1", "SequenceNo": 1},
+  {"Team": "MOS", "FlowId": 1, "Application": "AppShared", "SequenceNo": 2},
+  {"Team": "MOS", "FlowId": 2, "Application": "MOSApp2", "SequenceNo": 1},
+  {"Team": "MOS", "FlowId": 2, "Application": "App1", "SequenceNo": 2},
+  {"Team": "MOS", "FlowId": 3, "Application": "AppDuplicate", "SequenceNo": 1},
+  {"Team": "MOS", "FlowId": 3, "Application": "AppDuplicate", "SequenceNo": 1},
+  {"Team": "SDM", "FlowId": 1, "Application": "SDMApp1", "SequenceNo": 1},
+  {"Team": "SDM", "FlowId": 1, "Application": "SDMApp2", "SequenceNo": 2},
+  {"Team": "SDM", "FlowId": 2, "Application": "App2", "SequenceNo": 1},
+  {"Team": "SDM", "FlowId": 2, "Application": "AppShared", "SequenceNo": 2},
+  {"Team": "SDM", "FlowId": 3, "Application": "AppDuplicate", "SequenceNo": 2},
+  {"Team": "SDM", "FlowId": 3, "Application": "AppDuplicate", "SequenceNo": 2},
+  {"Team": "XYZ", "FlowId": 1, "Application": "XYZApp1", "SequenceNo": 1},
+  {"Team": "XYZ", "FlowId": 1, "Application": "AppShared", "SequenceNo": 2},
+  {"Team": "XYZ", "FlowId": 2, "Application": "XYZApp2", "SequenceNo": 1},
+  {"Team": "XYZ", "FlowId": 2, "Application": "App1", "SequenceNo": 2},
+  {"Team": "XYZ", "FlowId": 3, "Application": "AppDuplicate", "SequenceNo": 1},
+  {"Team": "XYZ", "FlowId": 3, "Application": "AppDuplicate", "SequenceNo": 1},
+  {"Team": "ABC", "FlowId": 1, "Application": "ABCApp1", "SequenceNo": 1},
+  {"Team": "ABC", "FlowId": 1, "Application": "AppShared", "SequenceNo": 2},
+  {"Team": "ABC", "FlowId": 2, "Application": "ABCApp2", "SequenceNo": 1},
+  {"Team": "ABC", "FlowId": 2, "Application": "App2", "SequenceNo": 2},
+  {"Team": "ABC", "FlowId": 3, "Application": "AppDuplicate", "SequenceNo": 2},
+  {"Team": "ABC", "FlowId": 3, "Application": "AppDuplicate", "SequenceNo": 2}
 ]
