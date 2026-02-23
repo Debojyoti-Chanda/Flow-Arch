@@ -170,47 +170,18 @@ function resetView() {
     d3.select("#mindmap").call(d3.zoom().transform, d3.zoomIdentity.translate(width / 2, 100).scale(0.8));
 }
 
-document.getElementById('sidebar-toggle').addEventListener('click', () => {
-    document.getElementById('sidebar').classList.toggle('collapsed');
-});
-
-
-
-
-// // Sidebar Toggle Logic
-// document.getElementById('sidebar-toggle').addEventListener('click', function() {
-//     const sidebar = document.getElementById('sidebar');
-//     sidebar.classList.toggle('collapsed');
-
-//     // Update arrow icon
-//     if (sidebar.classList.contains('collapsed')) {
-//         this.innerText = '➡️';
-//     } else {
-//         this.innerText = '⬅️';
-//     }
-// });
-
-// // Update the initial toggle button icon based on starting state
-// window.addEventListener('DOMContentLoaded', () => {
-//     const sidebar = document.getElementById('sidebar');
-//     const toggleBtn = document.getElementById('sidebar-toggle');
-//     toggleBtn.innerText = sidebar.classList.contains('collapsed') ? '➡️' : '⬅️';
-// });
 
 document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.getElementById('sidebar');
     const toggleBtn = document.getElementById('sidebar-toggle');
 
+    // Set initial arrow icon based on sidebar state
     if (toggleBtn) {
+        toggleBtn.innerText = sidebar.classList.contains('collapsed') ? '➡️' : '⬅️';
         toggleBtn.addEventListener('click', function() {
-            // Toggles the .collapsed class on the sidebar
             sidebar.classList.toggle('collapsed');
-            
-            // Change arrow based on existence of .collapsed class
             const isCollapsed = sidebar.classList.contains('collapsed');
             this.innerText = isCollapsed ? '➡️' : '⬅️';
-            
-            console.log("Sidebar is now:", isCollapsed ? "Hidden" : "Visible");
         });
     }
 });
