@@ -13,18 +13,49 @@ tree = d3.tree().nodeSize([220, 180]); // Adjusted spacing for labels
 d3.json("/api/data").then(data => {
     root = d3.hierarchy(data);
 
-    // Populate Dropdowns
+    // Build org->teams map
     const orgs = new Set();
     const teams = new Set();
+    const orgTeamsMap = {};
     root.descendants().forEach(d => {
-        if (d.data.type === 'org') orgs.add(d.data.name);
+        if (d.data.type === 'org') {
+            orgs.add(d.data.name);
+            // Find teams under this org
+            const teamsUnderOrg = [];
+            d.children && d.children.forEach(child => {
+                if (child.data.type === 'team') teamsUnderOrg.push(child.data.name);
+                // Also handle sub-orgs recursively
+                if (child.data.type === 'sub-org' && child.children) {
+                    child.children.forEach(grandchild => {
+                        if (grandchild.data.type === 'team') teamsUnderOrg.push(grandchild.data.name);
+                    });
+                }
+            });
+            orgTeamsMap[d.data.name] = teamsUnderOrg;
+        }
         if (d.data.type === 'team') teams.add(d.data.name);
     });
 
     const orgSelect = document.getElementById('org-filter');
     orgs.forEach(org => orgSelect.add(new Option(org, org)));
     const teamSelect = document.getElementById('team-filter');
-    teams.forEach(team => teamSelect.add(new Option(team, team)));
+    function populateTeams(selectedOrg) {
+        // Remove all except the first option
+        while (teamSelect.options.length > 1) teamSelect.remove(1);
+        if (selectedOrg === 'all') {
+            teams.forEach(team => teamSelect.add(new Option(team, team)));
+        } else {
+            (orgTeamsMap[selectedOrg] || []).forEach(team => teamSelect.add(new Option(team, team)));
+        }
+    }
+    // Initial population: all teams
+    populateTeams('all');
+
+    orgSelect.addEventListener('change', function() {
+        populateTeams(this.value);
+        // Reset team filter to 'all' when org changes
+        teamSelect.value = 'all';
+    });
 
     root.x0 = 0; root.y0 = 0;
     if (root.children) root.children.forEach(collapseAll);
