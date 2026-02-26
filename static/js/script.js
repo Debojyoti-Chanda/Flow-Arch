@@ -159,6 +159,19 @@ function update(source) {
         .attr("transform", d => `translate(${source.x0 || 0},${source.y0 || 0})`)
         .on('click', (event, d) => {
             showDetails(d);
+            // Collapse all siblings when expanding/collapsing a node
+            if (d.parent && d.parent.children) {
+                d.parent.children.forEach(sibling => {
+                    if (sibling !== d) {
+                        // Collapse sibling
+                        if (sibling.children) {
+                            sibling._children = sibling.children;
+                            sibling._children.forEach(collapseAll);
+                            sibling.children = null;
+                        }
+                    }
+                });
+            }
             if (d.children) { d._children = d.children; d.children = null; }
             else { expandNode(d); }
             update(d);
