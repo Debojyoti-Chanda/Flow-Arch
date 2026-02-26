@@ -238,6 +238,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.getElementById('sidebar');
     const toggleBtn = document.getElementById('sidebar-toggle');
 
+    // Reset button logic
+    const resetBtn = document.getElementById('reset-btn');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+            // Reset search input
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) searchInput.value = '';
+            // Reset filters
+            const orgSelect = document.getElementById('org-filter');
+            const teamSelect = document.getElementById('team-filter');
+            if (orgSelect) orgSelect.value = 'all';
+            if (teamSelect) teamSelect.value = 'all';
+            // Hide match count
+            const matchBadge = document.getElementById('match-count');
+            if (matchBadge) matchBadge.style.display = 'none';
+            // Reset mindmap view
+            if (typeof resetView === 'function') resetView();
+            // Collapse all nodes
+            if (typeof root !== 'undefined' && root.children) root.children.forEach(collapseAll);
+            if (typeof update === 'function') update(root);
+            // Reset info panel
+            const infoContent = document.getElementById('info-content');
+            if (infoContent) infoContent.innerHTML = '<p class="placeholder">Click a node to explore the specific data flow sequence.</p>';
+        });
+    }
+
     // Set initial arrow icon based on sidebar state
     if (toggleBtn) {
         toggleBtn.innerText = sidebar.classList.contains('collapsed') ? '➡️' : '⬅️';
