@@ -228,6 +228,13 @@ function showDetails(d) {
     const infoContent = document.getElementById('info-content');
     let html = `<h4>${d.data.name}</h4><p>Type: <strong>${d.data.type.toUpperCase()}</strong></p>`;
 
+    // Show file names for application nodes
+    if (d.data.type === 'application' && d.data.fileNames && d.data.fileNames.length > 0) {
+        html += `<div style="margin-bottom:8px; font-size:13px; color:var(--text-muted);"><strong>File(s):</strong> `;
+        html += d.data.fileNames.map(fn => `<span style="background:#e6f4ea; color:#2563eb; border-radius:5px; padding:2px 7px; margin-right:4px; font-weight:600;">${fn}</span>`).join('');
+        html += `</div>`;
+    }
+
     if (d.data.type === 'application' && d.data.flowIds) {
         d.data.flowIds.forEach(fid => {
             const seq = d.data.sequences[fid];
