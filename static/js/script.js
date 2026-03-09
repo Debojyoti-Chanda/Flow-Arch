@@ -189,8 +189,14 @@ function update(source) {
                     }
                 });
             }
-            if (d.children) { d._children = d.children; d.children = null; }
-            else { expandNode(d); }
+            if (d.children) {
+                // Recursively collapse all descendants
+                d._children = d.children;
+                d._children.forEach(collapseAll);
+                d.children = null;
+            } else {
+                expandNode(d);
+            }
             update(d);
         });
 
