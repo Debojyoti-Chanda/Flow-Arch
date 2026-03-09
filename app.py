@@ -48,6 +48,7 @@ def build_tree():
                         "type": "application",
                         "flowIds": [fid],
                         "sequences": {str(fid): full_seq},
+                        "fileNames": [step["FileName"]] if "FileName" in step else [],
                         "children": []
                     }
                     current_level.append(target_node)
@@ -56,6 +57,11 @@ def build_tree():
                     if fid not in target_node['flowIds']:
                         target_node['flowIds'].append(fid)
                     target_node['sequences'][str(fid)] = full_seq
+                    # Merge fileNames
+                    if "FileName" in step and step["FileName"] not in target_node.get("fileNames", []):
+                        if "fileNames" not in target_node:
+                            target_node["fileNames"] = []
+                        target_node["fileNames"].append(step["FileName"])
                 
                 # Move deeper into the tree
                 current_level = target_node['children']

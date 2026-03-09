@@ -80,72 +80,89 @@ function expandNode(d) {
 }
 
 // Search & Filter Logic
+
+function handleSearch({ term = '', filename = '', selectedOrg = 'all', selectedTeam = 'all' }) {
+    const countBadge = document.getElementById('match-count');
+    g.selectAll(".node").classed("highlight", false);
+    if (!term && !filename && selectedOrg === 'all' && selectedTeam === 'all') return;
+
+    // Helper: Collapse all nodes in the tree
+    function collapseAllDeep(d) {
+        if (d.children) {
+            d.children.forEach(collapseAllDeep);
+            d._children = d.children;
+            d.children = null;
+        } else if (d._children) {
+            d._children.forEach(collapseAllDeep);
+        }
+    }
+
+    // Helper: Expand ancestors of a node
+    function expandAncestors(d) {
+        if (d.parent) {
+            expandNode(d.parent);
+            expandAncestors(d.parent);
+        }
+    }
+
+    // Collapse everything before searching
+    collapseAllDeep(root);
+
+    let matches = [];
+    function searchAll(d) {
+        let isMatch = true;
+        const nameMatch = term && d.data.name.toLowerCase().includes(term);
+        let filenameMatch = false;
+        if (filename && d.data.fileNames && Array.isArray(d.data.fileNames)) {
+            filenameMatch = d.data.fileNames.some(fn => fn && fn.toLowerCase().includes(filename));
+        }
+
+        if (selectedOrg !== 'all' || selectedTeam !== 'all') {
+            let pathNames = d.ancestors().map(a => a.data.name);
+            if (selectedOrg !== 'all' && !pathNames.includes(selectedOrg)) isMatch = false;
+            if (selectedTeam !== 'all' && !pathNames.includes(selectedTeam)) isMatch = false;
+        }
+
+        if ((nameMatch || filenameMatch) && isMatch) matches.push(d);
+        const children = d.children || d._children;
+        if (children) children.forEach(searchAll);
+    }
+
+    searchAll(root);
+
+    if (matches.length > 0) {
+        countBadge.innerText = `${matches.length} found`;
+        countBadge.style.display = "inline-block";
+        // Expand only the ancestors of matching nodes
+        matches.forEach(d => {
+            expandAncestors(d);
+        });
+        update(root);
+        setTimeout(() => {
+            g.selectAll(".node").classed("highlight", d => matches.includes(d));
+            centerOnNode(matches[0]);
+        }, 500);
+    } else {
+        countBadge.innerText = "0 found";
+        countBadge.style.display = "inline-block";
+    }
+}
+
 document.getElementById('search-input').addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
         const term = this.value.toLowerCase().trim();
         const selectedOrg = document.getElementById('org-filter').value;
         const selectedTeam = document.getElementById('team-filter').value;
-        const countBadge = document.getElementById('match-count');
+        handleSearch({ term, selectedOrg, selectedTeam });
+    }
+});
 
-        g.selectAll(".node").classed("highlight", false);
-        if (!term && selectedOrg === 'all' && selectedTeam === 'all') return;
-
-        // Helper: Collapse all nodes in the tree
-        function collapseAllDeep(d) {
-            if (d.children) {
-                d.children.forEach(collapseAllDeep);
-                d._children = d.children;
-                d.children = null;
-            } else if (d._children) {
-                d._children.forEach(collapseAllDeep);
-            }
-        }
-
-        // Helper: Expand ancestors of a node
-        function expandAncestors(d) {
-            if (d.parent) {
-                expandNode(d.parent);
-                expandAncestors(d.parent);
-            }
-        }
-
-        // Collapse everything before searching
-        collapseAllDeep(root);
-
-        let matches = [];
-        function searchAll(d) {
-            let isMatch = true;
-            const nameMatch = d.data.name.toLowerCase().includes(term);
-
-            if (selectedOrg !== 'all' || selectedTeam !== 'all') {
-                let pathNames = d.ancestors().map(a => a.data.name);
-                if (selectedOrg !== 'all' && !pathNames.includes(selectedOrg)) isMatch = false;
-                if (selectedTeam !== 'all' && !pathNames.includes(selectedTeam)) isMatch = false;
-            }
-
-            if (nameMatch && isMatch) matches.push(d);
-            const children = d.children || d._children;
-            if (children) children.forEach(searchAll);
-        }
-
-        searchAll(root);
-
-        if (matches.length > 0) {
-            countBadge.innerText = `${matches.length} found`;
-            countBadge.style.display = "inline-block";
-            // Expand only the ancestors of matching nodes
-            matches.forEach(d => {
-                expandAncestors(d);
-            });
-            update(root);
-            setTimeout(() => {
-                g.selectAll(".node").classed("highlight", d => matches.includes(d));
-                centerOnNode(matches[0]);
-            }, 500);
-        } else {
-            countBadge.innerText = "0 found";
-            countBadge.style.display = "inline-block";
-        }
+document.getElementById('filename-input').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+        const filename = this.value.toLowerCase().trim();
+        const selectedOrg = document.getElementById('org-filter').value;
+        const selectedTeam = document.getElementById('team-filter').value;
+        handleSearch({ filename, selectedOrg, selectedTeam });
     }
 });
 
