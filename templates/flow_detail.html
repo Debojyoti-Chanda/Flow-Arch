@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flow Detail</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Flow Detail for {{ app_name }}</h1>
+        <a href="/" style="position:absolute;top:18px;right:32px;background:#fff;color:#4c9155;border:none;font-size:1.2rem;border-radius:50%;padding:8px 16px;box-shadow:0 2px 8px rgba(0,0,0,0.08);cursor:pointer;z-index:1100;text-decoration:none;">&#8592; Back</a>
+    </header>
+    <div style="margin:100px auto 0 auto;max-width:600px;background:#fff;border-radius:12px;box-shadow:0 2px 16px rgba(76,145,85,0.08);padding:32px;">
+        <h2 style="color:#2563eb;">Application: {{ app_name }}</h2>
+        <h3 style="color:#64748b;">Flow ID: {{ flow_id }}</h3>
+        {% if sequence %}
+        <div style="margin-top:24px;">
+            <h4>Sequence Steps:</h4>
+            <ol style="font-size:15px;color:#1e293b;">
+            {% for step in sequence %}
+                <li style="margin-bottom:8px;">{{ step }}</li>
+            {% endfor %}
+            </ol>
+        </div>
+        {% endif %}
+        {% if file_names %}
+        <div style="margin-top:24px;">
+            <h4>File(s):</h4>
+            {% for fn in file_names %}
+                <span style="background:#e6f4ea;color:#2563eb;border-radius:5px;padding:2px 7px;margin-right:4px;font-weight:600;">{{ fn }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

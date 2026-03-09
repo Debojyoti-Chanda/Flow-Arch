@@ -200,6 +200,19 @@ function update(source) {
             update(d);
         });
 
+    // Add details button for application nodes
+    nodeEnter.filter(d => d.data.type === 'application' && d.data.flowIds && d.data.flowIds.length > 0)
+        .append('foreignObject')
+        .attr('x', 18)
+        .attr('y', -12)
+        .attr('width', 28)
+        .attr('height', 28)
+        .html(d => {
+            const flowId = d.data.flowIds[0];
+            const appName = encodeURIComponent(d.data.name);
+            return `<button class="details-btn" title="View Flow Details" style="width:24px;height:24px;border:none;background:#e6f4ea;border-radius:50%;color:#2563eb;cursor:pointer;font-size:15px;box-shadow:0 1px 4px #b6e2c6;display:flex;align-items:center;justify-content:center;padding:0;" onclick="event.stopPropagation();window.location.href='/flow/${flowId}/${appName}';">&#9432;</button>`;
+        });
+
     nodeEnter.append('circle').attr('r', 12);
     nodeEnter.append('text').attr("dy", ".35em").attr("y", 30).attr("text-anchor", "middle")
         .text(d => d.data.name);

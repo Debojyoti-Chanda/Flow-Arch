@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify , request
 import json
 
 app = Flask(__name__)
@@ -100,6 +100,28 @@ def index():
 @app.route('/api/data')
 def data():
     return jsonify(build_tree())
+
+@app.route('/flow/<int:flow_id>/<app_name>')
+def flow_detail(flow_id, app_name):
+    try:
+        with open('flows.json') as f:
+            flows = json.load(f)
+    except FileNotFoundError:
+        return render_template('flow_detail.html', app_name=app_name, flow_id=flow_id, sequence=None, file_names=None)
+
+    # Find all steps for this flow and app
+    steps = [f for f in flows if f['FlowId'] == flow_id and f['Application'] == app_name]
+    if not steps:
+        return render_template('flow_detail.html', app_name=app_name, flow_id=flow_id, sequence=None, file_names=None)
+
+    # Get sequence for this flow
+    sequence_steps = sorted([f for f in flows if f['FlowId'] == flow_id], key=lambda x: x['SequenceNo'])
+    sequence = [s['Application'] for s in sequence_steps]
+
+    # Get file names for this app in this flow
+    file_names = list(set([s['FileName'] for s in steps if 'FileName' in s]))
+
+    return render_template('flow_detail.html', app_name=app_name, flow_id=flow_id, sequence=sequence, file_names=file_names)
 
 if __name__ == '__main__':
     app.run(debug=True)
